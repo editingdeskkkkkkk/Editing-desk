@@ -80,7 +80,6 @@ const PortfolioCard = ({ item, index, setSelectedItem, hoveredId, setHoveredId }
 
   const thumb = item.thumbnail || item.image;
   const isHovered = hoveredId === index;
-  const views = item.viewCount;
 
   return (
     <motion.div
@@ -120,21 +119,6 @@ const PortfolioCard = ({ item, index, setSelectedItem, hoveredId, setHoveredId }
           </div>
         </motion.div>
 
-        {/* Featured badge */}
-        {item.featured && (
-          <div className="absolute top-3 left-3 z-10 px-2 py-1 bg-gold text-ink text-[9px] font-sans font-bold tracking-widest uppercase rounded-sm flex items-center gap-1">
-            <Eye size={8} /> Most Viewed
-          </div>
-        )}
-
-        {/* View count badge */}
-        {views && views > 0 && (
-          <div className="absolute top-3 right-3 z-10 px-2 py-1 bg-black/60 backdrop-blur-sm border border-white/10 text-white/60 text-[9px] font-sans tracking-wide rounded-sm flex items-center gap-1">
-            <Eye size={8} />
-            {views >= 1_000_000 ? `${(views / 1_000_000).toFixed(1)}M` :
-             views >= 1_000 ? `${(views / 1_000).toFixed(0)}K` : views} views
-          </div>
-        )}
       </div>
 
       {/* Info */}
@@ -270,11 +254,23 @@ const Portfolio: React.FC = () => {
   }, [isConfigured]);
 
   // Decide which items to show
+  const processTitle = (title: string | undefined) => {
+    if (!title) return title;
+    const lower = title.toLowerCase();
+    if (lower.includes("entertainmet content") || lower.includes("entertainment content")) {
+      return "Sef spark student higlight";
+    }
+    if (lower.includes("high retention educational")) {
+      return "Reimagine the google workspace";
+    }
+    return title;
+  };
+
   const allItems: PortfolioItem[] = isConfigured
     ? ytVideos.map((v: YouTubeVideo) => ({
         videoId: v.videoId,
         videoUrl: v.videoUrl,
-        title: v.title,
+        title: processTitle(v.title),
         description: v.description,
         image: v.thumbnail,
         thumbnail: v.thumbnail,
@@ -286,6 +282,7 @@ const Portfolio: React.FC = () => {
       }))
     : staticItems.map(item => ({
         ...item,
+        title: processTitle(item.title),
         image: item.image,
         thumbnail: item.image,
       }));
@@ -517,20 +514,12 @@ const Portfolio: React.FC = () => {
                   <span className="text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-gold/70 mb-2 block">{selectedItem.category}</span>
                   <h2 className="font-sans text-2xl md:text-3xl font-bold text-white">{selectedItem.title}</h2>
                   {/* Stats row */}
-                  {(selectedItem.viewCount || selectedItem.likeCount) ? (
+                  {selectedItem.likeCount ? (
                     <div className="flex items-center gap-5 mt-3">
-                      {selectedItem.viewCount ? (
-                        <div className="flex items-center gap-1.5 text-white/35 text-xs font-sans">
-                          <Eye size={11} />
-                          {selectedItem.viewCount.toLocaleString()} views
-                        </div>
-                      ) : null}
-                      {selectedItem.likeCount ? (
-                        <div className="flex items-center gap-1.5 text-white/35 text-xs font-sans">
-                          <ThumbsUp size={11} />
-                          {selectedItem.likeCount.toLocaleString()} likes
-                        </div>
-                      ) : null}
+                      <div className="flex items-center gap-1.5 text-white/35 text-xs font-sans">
+                        <ThumbsUp size={11} />
+                        {selectedItem.likeCount.toLocaleString()} likes
+                      </div>
                     </div>
                   ) : null}
                 </div>
