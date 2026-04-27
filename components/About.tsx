@@ -30,13 +30,13 @@ const About: React.FC = () => {
   const icons = [Award, Users, Globe, Zap];
 
   return (
-    <section ref={containerRef} id="about" className="py-28 min-h-screen snap-start flex flex-col justify-center bg-transparent relative overflow-hidden">
+    <section ref={containerRef} id="about" className="py-20 flex flex-col justify-center bg-transparent relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
 
       {/* Background decoration */}
-      <motion.div style={{ y: yBg1 }} className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(201,168,76,0.04), transparent 70%)' }} />
-      <motion.div style={{ y: yBg2 }} className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(201,168,76,0.03), transparent 70%)' }} />
+      <motion.div style={{ y: yBg1, background: 'radial-gradient(circle, rgba(201,168,76,0.04), transparent 70%)' }} className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none" />
+      <motion.div style={{ y: yBg2, background: 'radial-gradient(circle, rgba(201,168,76,0.03), transparent 70%)' }} className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none" />
 
       {/* Geometric corner shapes */}
       <div className="absolute top-16 left-8 w-20 h-20 border border-gold/8 rounded-sm" style={{ transform: 'rotate(15deg)' }} />

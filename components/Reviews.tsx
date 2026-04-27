@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
 
+const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 768 || navigator.maxTouchPoints > 0);
+
 const REVIEWS = [
   {
     name: 'Sarah Mitchell',
@@ -125,6 +127,8 @@ const ReviewCard = ({ review, index }: { review: typeof REVIEWS[0]; index: numbe
           <img
             src={review.avatar}
             alt={review.name}
+            loading="lazy"
+            decoding="async"
             className="w-10 h-10 rounded-full object-cover border border-white/10 group-hover:border-gold/30 transition-colors duration-300 pointer-events-none"
           />
           <span className="absolute -bottom-0.5 -right-0.5 text-[10px] leading-none">{review.flag}</span>
@@ -165,7 +169,7 @@ const Reviews: React.FC = () => {
   const avgRating = '4.7';
 
   return (
-    <section id="reviews" className="py-28 min-h-screen snap-start flex flex-col justify-center bg-transparent relative overflow-hidden">
+    <section id="reviews" className="py-20 flex flex-col justify-center bg-transparent relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
       <div className="absolute inset-0 dot-grid opacity-20" />

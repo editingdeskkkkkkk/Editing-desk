@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 const pages = [
@@ -14,36 +14,43 @@ const pages = [
 const PageIndicator: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // Find the closest section to center viewport
-      let closest = 0;
-      let minDiff = Infinity;
-      const centerY = window.scrollY + window.innerHeight / 2;
+  const activeRef = useRef(0);
 
-      pages.forEach((page, index) => {
-        const el = document.getElementById(page.id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          const elCenter = rect.top + window.scrollY + rect.height / 2;
-          const diff = Math.abs(centerY - elCenter);
-          if (diff < minDiff) {
-            minDiff = diff;
-            closest = index;
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        let closest = 0;
+        let minDiff = Infinity;
+        const centerY = window.scrollY + window.innerHeight / 2;
+
+        pages.forEach((page, index) => {
+          const el = document.getElementById(page.id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const elCenter = rect.top + window.scrollY + rect.height / 2;
+            const diff = Math.abs(centerY - elCenter);
+            if (diff < minDiff) {
+              minDiff = diff;
+              closest = index;
+            }
           }
+        });
+        if (closest !== activeRef.current) {
+          activeRef.current = closest;
+          setActiveIndex(closest);
         }
+        ticking = false;
       });
-      if (closest !== activeIndex) {
-        setActiveIndex(closest);
-      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    // Initial check
     setTimeout(handleScroll, 100);
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [activeIndex]);
+  }, []);
 
   return (
     <div className="fixed right-6 top-1/2 -translate-y-1/2 z-[1000] hidden lg:flex flex-col items-center gap-4">

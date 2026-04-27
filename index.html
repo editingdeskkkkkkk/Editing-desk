@@ -4,101 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Editing Desk | Premium Creative Agency</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              gold: {
-                DEFAULT: '#C9A84C',
-                light: '#E8C96A',
-                bright: '#F5D97A',
-                dim: '#8A6A1A',
-              },
-              ink: {
-                DEFAULT: '#080808',
-                1: '#0F0F0F',
-                2: '#141414',
-                3: '#1A1A1A',
-                4: '#222222',
-                5: '#2E2E2E',
-              }
-            },
-            fontFamily: {
-              sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
-            }
-          }
-        }
-      }
-    </script>
-    <style>
-      body {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        background-color: #080808;
-        font-family: 'Plus Jakarta Sans', Inter, sans-serif;
-        color: #fff;
-        cursor: none;
-      }
-      a, button, [role="button"] { cursor: none; }
-      .glow-gold { box-shadow: 0 0 30px rgba(201,168,76,0.25), 0 0 60px rgba(201,168,76,0.1); }
-      .text-glow-gold { text-shadow: 0 0 40px rgba(201,168,76,0.4); }
-      body::before {
-        content: '';
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 9999;
-        opacity: 0.025;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        background-repeat: repeat;
-        background-size: 200px 200px;
-      }
-      ::-webkit-scrollbar { width: 4px; }
-      ::-webkit-scrollbar-track { background: #080808; }
-      ::-webkit-scrollbar-thumb { background: #C9A84C; border-radius: 10px; }
-      @keyframes shimmer {
-        0% { background-position: -200% center; }
-        100% { background-position: 200% center; }
-      }
-      .text-shimmer {
-        background: linear-gradient(90deg, #C9A84C 0%, #F5D97A 30%, #C9A84C 50%, #8A6A1A 70%, #C9A84C 100%);
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        animation: shimmer 4s linear infinite;
-      }
-      .card-hover { transition: border-color 0.3s ease, box-shadow 0.3s ease; }
-      .card-hover:hover {
-        border-color: rgba(201,168,76,0.5) !important;
-        box-shadow: 0 0 40px rgba(201,168,76,0.08), 0 25px 50px rgba(0,0,0,0.5);
-      }
-      .dot-grid {
-        background-image: radial-gradient(circle, rgba(201,168,76,0.07) 1px, transparent 1px);
-        background-size: 40px 40px;
-      }
-      .input-gold { background: #0f0f0f; border: 1px solid #2a2a2a; color: white; }
-      .input-gold:focus { border-color: #C9A84C; outline: none; box-shadow: 0 0 0 1px rgba(201,168,76,0.3); }
-      .input-gold::placeholder { color: #555; }
-      .input-gold option { background: #141414; }
-    </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.560.0",
-    "framer-motion": "https://esm.sh/framer-motion@^12.23.26",
-    "vite": "https://esm.sh/vite@^7.2.7",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
-  }
-}
-</script>
-</head>
+  </head>
   <body class="bg-ink text-white">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>

@@ -5,6 +5,8 @@ import { Play, X, Lock, Eye, ThumbsUp, Youtube, RefreshCw, AlertCircle } from 'l
 import { useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { useYouTubeVideos, YouTubeVideo } from '../hooks/useYouTubeVideos';
 
+const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 768 || navigator.maxTouchPoints > 0);
+
 // ── Unified item type that works for both static + YouTube items ─────────────
 interface PortfolioItem {
   videoId?: string;
@@ -16,8 +18,6 @@ interface PortfolioItem {
   category: string;
   featured?: boolean;
   allowed?: boolean;
-  viewCount?: number;
-  likeCount?: number;
 }
 
 // ── Logo Fallback Thumbnail ──────────────────────────────────────────────────
@@ -86,14 +86,14 @@ const PortfolioCard = ({ item, index, setSelectedItem, hoveredId, setHoveredId }
       layout
       className="group relative rounded-sm cursor-interactive bg-ink-2 border border-white/5 overflow-hidden cursor-pointer"
       onClick={() => setSelectedItem(item)}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => { x.set(0); y.set(0); setHoveredId(null); }}
+      onMouseMove={isMobile ? undefined : handleMouseMove}
+      onMouseLeave={() => { if (!isMobile) { x.set(0); y.set(0); } setHoveredId(null); }}
       onMouseEnter={() => setHoveredId(index)}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      transition={{ duration: 0.35, delay: index * 0.04 }}
+      style={isMobile ? {} : { rotateX, rotateY, transformStyle: "preserve-3d" }}
     >
       {/* Thumbnail */}
       <div className="aspect-video w-full relative overflow-hidden bg-ink-3">
@@ -101,9 +101,11 @@ const PortfolioCard = ({ item, index, setSelectedItem, hoveredId, setHoveredId }
           <motion.img
             src={thumb}
             alt={item.title}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover pointer-events-none"
-            animate={isHovered ? { scale: 1.08, opacity: 0.6 } : { scale: 1, opacity: 0.85 }}
-            transition={{ duration: 0.5 }}
+            animate={isHovered ? { scale: 1.06, opacity: 0.6 } : { scale: 1, opacity: 0.85 }}
+            transition={{ duration: 0.4 }}
           />
         ) : (
           <LogoThumbnail isHovered={isHovered} />
@@ -258,10 +260,10 @@ const Portfolio: React.FC = () => {
     if (!title) return title;
     const lower = title.toLowerCase();
     if (lower.includes("entertainmet content") || lower.includes("entertainment content")) {
-      return "Sef spark student higlight";
+      return 'Entertainment Content Research & Video Editing';
     }
     if (lower.includes("high retention educational")) {
-      return "Reimagine the google workspace";
+      return 'High Retention Educational Content Edit "ASCII Art"';
     }
     return title;
   };
@@ -277,8 +279,6 @@ const Portfolio: React.FC = () => {
         category: v.category,
         featured: v.featured,
         allowed: v.allowed,
-        viewCount: v.viewCount,
-        likeCount: v.likeCount,
       }))
     : staticItems.map(item => ({
         ...item,
@@ -291,9 +291,38 @@ const Portfolio: React.FC = () => {
   const categories = ['Selected Works', 'All', ...uniqueCategories];
   
   let filteredItems = allItems.filter(item => item.allowed !== false);
+  
   if (activeCategory === 'Selected Works') {
-    // The hook already sorts by viewCount descending, so we just slice the top 6
-    filteredItems = filteredItems.slice(0, 6);
+    const manualVideo1: PortfolioItem = allItems.find(i => i.videoId === '4r0soC9m7zw' || i.videoUrl.includes('4r0soC9m7zw')) || {
+      videoId: '4r0soC9m7zw',
+      videoUrl: 'https://www.youtube.com/shorts/4r0soC9m7zw',
+      title: 'SEF spark student event highlight',
+      category: 'Short-Form Reels',
+      image: `https://img.youtube.com/vi/4r0soC9m7zw/maxresdefault.jpg`,
+      thumbnail: `https://img.youtube.com/vi/4r0soC9m7zw/maxresdefault.jpg`
+    };
+    
+    const manualVideo2: PortfolioItem = allItems.find(i => i.videoId === 'eR2RpWOkEpU' || i.videoUrl.includes('eR2RpWOkEpU')) || {
+      videoId: 'eR2RpWOkEpU',
+      videoUrl: 'https://www.youtube.com/watch?v=eR2RpWOkEpU',
+      title: 'pengu promotion 3d animtion',
+      category: 'Animation',
+      image: `https://img.youtube.com/vi/eR2RpWOkEpU/maxresdefault.jpg`,
+      thumbnail: `https://img.youtube.com/vi/eR2RpWOkEpU/maxresdefault.jpg`
+    };
+
+    let selected = filteredItems.filter(item => {
+      const lower = item.title?.toLowerCase() || '';
+      // Exclude the old ones from Selected items
+      if (lower.includes('entertainment content research')) return false;
+      if (lower.includes('high retention educational')) return false;
+      // Exclude the new ones from the remaining pool so we don't duplicate them
+      if (item.videoId === '4r0soC9m7zw' || item.videoUrl.includes('4r0soC9m7zw')) return false;
+      if (item.videoId === 'eR2RpWOkEpU' || item.videoUrl.includes('eR2RpWOkEpU')) return false;
+      return true;
+    });
+
+    filteredItems = [manualVideo1, manualVideo2, ...selected.slice(0, 4)];
   } else if (activeCategory !== 'All') {
     filteredItems = filteredItems.filter(item => item.category === activeCategory);
   }
@@ -319,7 +348,7 @@ const Portfolio: React.FC = () => {
   };
 
   return (
-    <section id="work" className="py-28 min-h-screen snap-start flex flex-col justify-center bg-transparent relative overflow-hidden">
+    <section id="work" className="py-20 flex flex-col justify-center bg-transparent relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent pointer-events-none" />
 

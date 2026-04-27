@@ -25,7 +25,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-28 min-h-screen snap-start flex flex-col justify-center bg-transparent relative overflow-hidden">
+    <section id="contact" className="py-20 flex flex-col justify-center bg-transparent relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
       <div className="absolute inset-0 dot-grid opacity-20" />
 

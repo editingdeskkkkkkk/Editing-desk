@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Instagram, Linkedin, Twitter } from 'lucide-react';
+import { Instagram, Linkedin } from 'lucide-react';
+
+const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 768 || navigator.maxTouchPoints > 0);
 
 const TEAM = [
   {
@@ -58,17 +60,17 @@ const TiltCard = ({ member, index }: { member: typeof TEAM[0]; index: number }) 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: index * 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      style={{ perspective: 1000 }}
+      transition={{ delay: index * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      style={isMobile ? {} : { perspective: 1000 }}
     >
       <motion.div
-        style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        onMouseMove={handleMouse}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={resetTilt}
+        style={isMobile ? {} : { rotateX, rotateY, transformStyle: 'preserve-3d' }}
+        onMouseMove={isMobile ? undefined : handleMouse}
+        onMouseEnter={isMobile ? undefined : () => setHovered(true)}
+        onMouseLeave={isMobile ? undefined : resetTilt}
         className="relative bg-ink-2 border border-white/5 rounded-sm overflow-hidden group cursor-default"
       >
         {/* Gold top border on hover */}
@@ -83,9 +85,11 @@ const TiltCard = ({ member, index }: { member: typeof TEAM[0]; index: number }) 
           <motion.img
             src={member.avatar}
             alt={member.name}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover pointer-events-none"
-            animate={{ scale: hovered ? 1.07 : 1, filter: hovered ? 'brightness(0.7)' : 'brightness(0.6) saturate(0.8)' }}
-            transition={{ duration: 0.5 }}
+            animate={{ scale: hovered ? 1.05 : 1, filter: hovered ? 'brightness(0.7)' : 'brightness(0.6) saturate(0.8)' }}
+            transition={{ duration: 0.4 }}
           />
           {/* Dark gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-ink-2 via-ink-2/30 to-transparent" />
@@ -143,7 +147,7 @@ const TiltCard = ({ member, index }: { member: typeof TEAM[0]; index: number }) 
 
 const Team: React.FC = () => {
   return (
-    <section id="team" className="py-28 min-h-screen snap-start flex flex-col justify-center bg-transparent relative overflow-hidden">
+    <section id="team" className="py-20 flex flex-col justify-center bg-transparent relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
       <div className="absolute inset-0 dot-grid opacity-25" />

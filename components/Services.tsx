@@ -2,6 +2,8 @@ import React from 'react';
 import { SERVICES } from '../constants';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 
+const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 768 || navigator.maxTouchPoints > 0);
+
 const HolographicCard = ({ service, index }: { service: any, index: number }) => {
   const Icon = service.icon;
   const x = useMotionValue(0);
@@ -37,13 +39,13 @@ const HolographicCard = ({ service, index }: { service: any, index: number }) =>
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
-      transition={{ delay: index * 0.08, duration: 0.6 }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
+      transition={{ delay: index * 0.06, duration: 0.5 }}
+      onMouseMove={isMobile ? undefined : handleMouseMove}
+      onMouseLeave={isMobile ? undefined : handleMouseLeave}
+      style={isMobile ? {} : {
         rotateX,
         rotateY,
         transformStyle: "preserve-3d",
@@ -88,7 +90,7 @@ const HolographicCard = ({ service, index }: { service: any, index: number }) =>
 
 const Services: React.FC = () => {
   return (
-    <section id="services" className="py-28 min-h-screen snap-start flex flex-col justify-center bg-transparent relative overflow-hidden">
+    <section id="services" className="py-20 flex flex-col justify-center bg-transparent relative overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 dot-grid opacity-30 pointer-events-none" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent pointer-events-none" />
